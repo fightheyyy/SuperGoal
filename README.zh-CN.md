@@ -14,7 +14,7 @@ SuperGoal 是一套给 Codex goal mode 用的轻量工作流工具：一个 macO
 
 ## macOS App
 
-App 会出现在 macOS 右上角菜单栏，是一个 `SG` 键盘图标。
+App 会出现在 macOS 右上角菜单栏，是一个很小的黑白键盘图标。
 
 在 Codex 里使用：
 
@@ -44,7 +44,7 @@ App 会出现在 macOS 右上角菜单栏，是一个 `SG` 键盘图标。
 下载 `.dmg` 文件，例如：
 
 ```text
-SuperGoal-v0.1.1.dmg
+SuperGoal-v0.1.2.dmg
 ```
 
 打开磁盘镜像，把 `supergoal.app` 拖到 `Applications`，然后启动。
@@ -54,7 +54,7 @@ SuperGoal-v0.1.1.dmg
 ## 配置
 
 1. 打开 `supergoal.app`。
-2. 点击右上角菜单栏里的 `SG` 键盘图标。
+2. 点击右上角菜单栏里的键盘图标。
 3. 打开 `Settings...`。
 4. 配置：
    - API key

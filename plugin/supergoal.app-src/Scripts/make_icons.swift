@@ -191,31 +191,27 @@ guard iconutil.terminationStatus == 0 else {
     throw NSError(domain: "supergoal.iconutil", code: Int(iconutil.terminationStatus))
 }
 try? fileManager.removeItem(at: iconsetURL)
+try? fileManager.removeItem(at: assetsURL.appendingPathComponent("MenuBarIcon.png"))
 
-let colorMenuData = renderBitmap(width: 90, height: 54) { width, height in
-    let scale = min(width / 118, height / 86)
-    let x = (width - 118 * scale) / 2
-    let y = (height - 86 * scale) / 2
-    let shell = NSRect(x: x, y: y, width: 118 * scale, height: 86 * scale)
-    drawKeyboardMark(in: shell, scale: scale, cornerRadius: 8 * scale, strokeWidth: 4 * scale, keyRadius: 1.1 * scale)
-}
-try colorMenuData.write(to: assetsURL.appendingPathComponent("MenuBarIcon.png"))
-
-let menuData = renderBitmap(width: 60, height: 36) { width, _ in
-    let scale = width / 60
+let menuData = renderBitmap(width: 72, height: 48) { width, height in
+    let scale = min(width / 72, height / 48)
     let ink = NSColor.black
-    roundedStroke(NSRect(x: 5 * scale, y: 3 * scale, width: 50 * scale, height: 30 * scale), radius: 4 * scale, color: ink, lineWidth: 2 * scale)
-    roundedStroke(NSRect(x: 14 * scale, y: 14 * scale, width: 32 * scale, height: 13 * scale), radius: 1.5 * scale, color: ink, lineWidth: 1.5 * scale)
+    roundedStroke(NSRect(x: 10 * scale, y: 8 * scale, width: 52 * scale, height: 32 * scale), radius: 7 * scale, color: ink, lineWidth: 3.2 * scale)
+    roundedStroke(NSRect(x: 18 * scale, y: 24 * scale, width: 36 * scale, height: 10 * scale), radius: 3 * scale, color: ink, lineWidth: 2.3 * scale)
     let paragraph = NSMutableParagraphStyle()
     paragraph.alignment = .center
     let attrs: [NSAttributedString.Key: Any] = [
-        .font: NSFont.systemFont(ofSize: 8 * scale, weight: .heavy),
+        .font: NSFont.systemFont(ofSize: 7 * scale, weight: .bold),
         .foregroundColor: ink,
         .paragraphStyle: paragraph
     ]
-    NSString(string: "SG").draw(in: NSRect(x: 14 * scale, y: 15 * scale, width: 32 * scale, height: 10 * scale), withAttributes: attrs)
+    NSString(string: "SG").draw(in: NSRect(x: 18 * scale, y: 24.5 * scale, width: 36 * scale, height: 8 * scale), withAttributes: attrs)
     for column in 0..<6 {
-        rect(14 * scale + CGFloat(column) * 6 * scale, 7 * scale, 4 * scale, 3 * scale, color: ink)
+        roundedRect(
+            NSRect(x: 18 * scale + CGFloat(column) * 6.8 * scale, y: 14 * scale, width: 4.3 * scale, height: 3.4 * scale),
+            radius: 1.2 * scale,
+            color: ink
+        )
     }
 }
 try menuData.write(to: assetsURL.appendingPathComponent("MenuBarIconTemplate.png"))

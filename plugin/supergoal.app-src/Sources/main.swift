@@ -1088,7 +1088,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     private func buildStatusMenu() {
-        statusItem = NSStatusBar.system.statusItem(withLength: 38)
+        statusItem = NSStatusBar.system.statusItem(withLength: 30)
         configureStatusButton()
 
         let menu = NSMenu()
@@ -1127,16 +1127,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         button.title = ""
         button.toolTip = "supergoal"
 
-        if let url = Bundle.main.url(forResource: "MenuBarIcon", withExtension: "png"),
-            let image = NSImage(contentsOf: url) {
-            image.isTemplate = false
-            image.size = NSSize(width: 30, height: 22)
-            button.image = image
-            button.imagePosition = .imageOnly
-        } else if let url = Bundle.main.url(forResource: "MenuBarIconTemplate", withExtension: "png"),
+        if let url = Bundle.main.url(forResource: "MenuBarIconTemplate", withExtension: "png"),
            let image = NSImage(contentsOf: url) {
             image.isTemplate = true
-            image.size = NSSize(width: 30, height: 22)
+            image.size = NSSize(width: 22, height: 16)
             button.image = image
             button.imagePosition = .imageOnly
         } else {

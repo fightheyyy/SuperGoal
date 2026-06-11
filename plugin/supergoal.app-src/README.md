@@ -30,7 +30,7 @@ open /Applications/supergoal.app
 The release disk image is created at:
 
 ```text
-release/SuperGoal-v0.1.1.dmg
+release/SuperGoal-v0.1.2.dmg
 ```
 
 ## Use

@@ -10,12 +10,12 @@
 
 - Done: identify `supergoal.app-src` as the only module touched by custom prompt work.
 - Done: add a settings-backed custom compiler prompt while preserving default behavior.
-- Done: regenerate app and menu-bar icons with the rounded SG keyboard mark.
+- Done: keep the app icon stable while switching the menu-bar icon to a smaller monochrome template mark.
 - Done: add a release DMG packaging script.
 
 ## Next Steps
 
-- Monitor release feedback and keep future release artifacts on the `.dmg` path.
+- Upload the refreshed `.dmg` to GitHub Release and keep the zip asset out of the release.
 
 ## Owners
 
@@ -28,15 +28,14 @@
 - A user can save a custom compiler prompt from the menu bar's dedicated prompt editor.
 - Saved custom prompt is used for future compile requests.
 - Release users can download a `.dmg` package directly.
-- App and menu-bar icons use the updated rounded SG keyboard mark.
+- App icon remains unchanged; menu-bar icon uses a smaller rounded black/white template mark.
 
 ## Verification Log
 
 - Passed: Swift build via `./supergoal.app-src/build.sh`.
 - Passed: runtime smoke checks for default and custom compiler prompt modes.
-- Passed: generated `supergoal.app-src/release/SuperGoal-v0.1.1.dmg`.
-- Passed: installed `/Applications/supergoal.app` with refreshed icon resources and LaunchServices registration.
-- Passed: uploaded `SuperGoal-v0.1.1.dmg` to GitHub Release.
+- Passed: generated `supergoal.app-src/release/SuperGoal-v0.1.2.dmg`.
+- Passed: installed `/Applications/supergoal.app`; app resources no longer include the colored menu-bar icon.
 
 ## Risks / Open Questions
 

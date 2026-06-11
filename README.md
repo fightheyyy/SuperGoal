@@ -14,7 +14,7 @@ It helps turn rough, messy requirements into clear goal-mode prompts before Code
 
 ## macOS App
 
-The app sits in the menu bar as an `SG` keyboard icon.
+The app sits in the menu bar as a small monochrome keyboard icon.
 
 In Codex:
 
@@ -44,7 +44,7 @@ Download the latest macOS package from:
 Use the `.dmg` file, for example:
 
 ```text
-SuperGoal-v0.1.1.dmg
+SuperGoal-v0.1.2.dmg
 ```
 
 Open the disk image, drag `supergoal.app` to `Applications`, then launch it.
@@ -54,7 +54,7 @@ The app is ad-hoc signed but not notarized. macOS may ask you to confirm opening
 ## Setup
 
 1. Open `supergoal.app`.
-2. Click the menu-bar `SG` keyboard icon.
+2. Click the menu-bar keyboard icon.
 3. Open `Settings...`.
 4. Configure:
    - API key
