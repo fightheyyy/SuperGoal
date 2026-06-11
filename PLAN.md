@@ -13,6 +13,7 @@
 - Done: keep the app icon stable while switching the menu-bar icon to a smaller monochrome template mark.
 - Done: add a release DMG packaging script.
 - Done: add a visible README promo preview while keeping the full MP4 attached to the release.
+- Done: add the SuperGoal app icon as a README brand anchor.
 
 ## Next Steps
 
@@ -31,6 +32,7 @@
 - Release users can download a `.dmg` package directly.
 - App icon remains unchanged; menu-bar icon uses a smaller rounded black/white template mark.
 - The README shows a visible animated promo preview and links to the full MP4 release asset.
+- The README includes the app icon near the title for immediate product recognition.
 
 ## Verification Log
 
@@ -40,6 +42,7 @@
 - Passed: installed `/Applications/supergoal.app`; app resources no longer include the colored menu-bar icon.
 - Passed: uploaded `SuperGoal-v0.1.2.dmg` to GitHub Release.
 - Passed: generated `docs/supergoal-promo.gif` from the MP4 promo so GitHub README can display it inline.
+- Passed: exported `docs/supergoal-icon.png` from the app icon asset for README display.
 
 ## Risks / Open Questions
 

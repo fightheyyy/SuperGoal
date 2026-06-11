@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="./docs/supergoal-icon.png" width="96" alt="SuperGoal icon">
+</p>
+
 # SuperGoal
 
 SuperGoal is a Codex goal-mode workflow kit: one macOS menu-bar app plus two local Codex skills.

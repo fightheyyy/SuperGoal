@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="./docs/supergoal-icon.png" width="96" alt="SuperGoal 图标">
+</p>
+
 # SuperGoal
 
 SuperGoal 是一套给 Codex goal mode 用的轻量工作流工具：一个 macOS 菜单栏 App，加两个本地 Codex Skill。
