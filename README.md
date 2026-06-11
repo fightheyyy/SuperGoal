@@ -6,6 +6,12 @@ It helps turn rough, messy requirements into clear goal-mode prompts before Code
 
 [中文 README](./README.zh-CN.md)
 
+## Demo
+
+![SuperGoal promo preview](./docs/supergoal-promo.gif)
+
+[Watch the full MP4 demo](https://github.com/fightheyyy/SuperGoal/releases/download/v0.1.2/SuperGoal-promo.mp4)
+
 ## What Is Included
 
 - `plugin/supergoal.app-src`: a macOS menu-bar app that rewrites selected text in Codex into a structured goal prompt.

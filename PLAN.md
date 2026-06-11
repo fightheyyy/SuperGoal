@@ -12,6 +12,7 @@
 - Done: add a settings-backed custom compiler prompt while preserving default behavior.
 - Done: keep the app icon stable while switching the menu-bar icon to a smaller monochrome template mark.
 - Done: add a release DMG packaging script.
+- Done: add a visible README promo preview while keeping the full MP4 attached to the release.
 
 ## Next Steps
 
@@ -29,6 +30,7 @@
 - Saved custom prompt is used for future compile requests.
 - Release users can download a `.dmg` package directly.
 - App icon remains unchanged; menu-bar icon uses a smaller rounded black/white template mark.
+- The README shows a visible animated promo preview and links to the full MP4 release asset.
 
 ## Verification Log
 
@@ -37,6 +39,7 @@
 - Passed: generated `supergoal.app-src/release/SuperGoal-v0.1.2.dmg`.
 - Passed: installed `/Applications/supergoal.app`; app resources no longer include the colored menu-bar icon.
 - Passed: uploaded `SuperGoal-v0.1.2.dmg` to GitHub Release.
+- Passed: generated `docs/supergoal-promo.gif` from the MP4 promo so GitHub README can display it inline.
 
 ## Risks / Open Questions
 

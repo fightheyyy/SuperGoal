@@ -6,6 +6,12 @@ SuperGoal 是一套给 Codex goal mode 用的轻量工作流工具：一个 macO
 
 [English README](./README.md)
 
+## 演示
+
+![SuperGoal 宣传预览](./docs/supergoal-promo.gif)
+
+[查看高清 MP4 演示](https://github.com/fightheyyy/SuperGoal/releases/download/v0.1.2/SuperGoal-promo.mp4)
+
 ## 包含什么
 
 - `plugin/supergoal.app-src`：macOS 菜单栏 App，可以把 Codex 输入框中选中的粗需求直接替换成结构化 goal prompt。
