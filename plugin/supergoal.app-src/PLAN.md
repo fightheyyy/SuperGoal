@@ -21,7 +21,7 @@
 
 ## Next Steps
 
-- Upload the generated `.dmg` to GitHub Release and remove the old zip asset.
+- Monitor release feedback and keep future release artifacts on the `.dmg` path.
 
 ## Owners
 
@@ -48,6 +48,7 @@
 - Passed: `./package_dmg.sh` created `release/SuperGoal-v0.1.2.dmg`.
 - Passed: `codesign --verify --deep --strict /Applications/supergoal.app`.
 - Passed: installed app resources include `AppIcon.icns` and `MenuBarIconTemplate.png`; colored `MenuBarIcon.png` is no longer packaged.
+- Passed: uploaded `SuperGoal-v0.1.2.dmg` to GitHub Release.
 
 ## Risks / Open Questions
 

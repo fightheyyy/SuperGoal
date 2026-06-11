@@ -15,7 +15,7 @@
 
 ## Next Steps
 
-- Upload the refreshed `.dmg` to GitHub Release and keep the zip asset out of the release.
+- Monitor release feedback and keep future release artifacts on the `.dmg` path.
 
 ## Owners
 
@@ -36,6 +36,7 @@
 - Passed: runtime smoke checks for default and custom compiler prompt modes.
 - Passed: generated `supergoal.app-src/release/SuperGoal-v0.1.2.dmg`.
 - Passed: installed `/Applications/supergoal.app`; app resources no longer include the colored menu-bar icon.
+- Passed: uploaded `SuperGoal-v0.1.2.dmg` to GitHub Release.
 
 ## Risks / Open Questions
 
