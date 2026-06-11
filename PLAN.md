@@ -36,7 +36,7 @@
 - Passed: runtime smoke checks for default and custom compiler prompt modes.
 - Passed: generated `supergoal.app-src/release/SuperGoal-v0.1.1.dmg`.
 - Passed: installed `/Applications/supergoal.app` with refreshed icon resources and LaunchServices registration.
-- Pending until publish step: upload `SuperGoal-v0.1.1.dmg` to GitHub Release.
+- Passed: uploaded `SuperGoal-v0.1.1.dmg` to GitHub Release.
 
 ## Risks / Open Questions
 

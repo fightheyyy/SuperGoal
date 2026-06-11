@@ -48,7 +48,7 @@
 - Passed: `./package_dmg.sh` created `release/SuperGoal-v0.1.1.dmg`.
 - Passed: `codesign --verify --deep --strict /Applications/supergoal.app`.
 - Passed: installed app resources include updated `AppIcon.icns` and `MenuBarIcon.png`.
-- Pending until publish step: upload `SuperGoal-v0.1.1.dmg` to GitHub Release.
+- Passed: uploaded `SuperGoal-v0.1.1.dmg` to GitHub Release.
 
 ## Risks / Open Questions
 
