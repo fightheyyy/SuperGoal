@@ -1,8 +1,6 @@
-# supergoal macOS app
+# supergoal
 
 Small macOS menu-bar helper that replaces selected text in Codex with a compiled goal-mode prompt.
-
-中文：一个轻量 macOS 菜单栏插件，用来把 Codex 输入框中选中的粗需求替换成更稳定的 goal-mode prompt。
 
 ## Build
 
@@ -23,18 +21,36 @@ build/supergoal.app
 open /Applications/supergoal.app
 ```
 
+## Package
+
+```bash
+./package_dmg.sh
+```
+
+The release disk image is created at:
+
+```text
+release/SuperGoal-v0.1.1.dmg
+```
+
 ## Use
 
 1. Open `/Applications/supergoal.app`.
-2. Click the keyboard menu-bar icon and open `Settings...`.
+2. Click the `SG` keyboard menu-bar item and open `Settings...`.
 3. Enter an OpenAI API key, Base URL, and model.
-4. Optional: open `Custom Compiler Prompt...` to use your own compiler prompt.
-5. In Codex, type a rough request into the message box.
-6. Select that rough request.
-7. Press `Control + Option + Command + G` or your custom shortcut.
-8. supergoal replaces the selected text with a Codex goal-mode prompt.
+4. In Codex, type a rough request into the message box.
+5. Select that rough request.
+6. Press `Control + Option + Command + G`.
+7. supergoal replaces the selected text with a Codex goal-mode prompt.
 
 supergoal uses macOS keyboard automation to copy and replace the selected text. The first run may require Accessibility permission for `/Applications/supergoal.app`.
+
+Fallback if Accessibility is stubborn:
+
+1. Select the rough request in Codex.
+2. Press `Command + C`.
+3. Click `sg` -> `Compile Clipboard`.
+4. Press `Command + V` in Codex.
 
 Base URL examples:
 

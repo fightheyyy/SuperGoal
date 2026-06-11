@@ -6,6 +6,8 @@
 - Settings support API key, base URL, model, and custom global shortcut.
 - A separate `Custom Compiler Prompt...` menu item opens custom prompt editing.
 - Empty custom prompt input falls back to the built-in compiler prompt.
+- App and menu-bar icons are generated as a rounded SG keyboard mark.
+- Release packaging creates a `.dmg` instead of a zip.
 
 ## Milestones
 
@@ -14,10 +16,12 @@
 - Done: move custom prompt editing out of Settings into a dedicated menu item/window.
 - Done: pass effective prompt into `OpenAIClient`.
 - Done: verify default and custom prompt paths.
+- Done: regenerate app icon and menu-bar icon with rounded white frame.
+- Done: add `package_dmg.sh` for a drag-to-Applications disk image.
 
 ## Next Steps
 
-- Keep the custom prompt editor lightweight; avoid presets or prompt profile systems unless explicitly requested.
+- Monitor release feedback and keep future release artifacts on the `.dmg` path.
 
 ## Owners
 
@@ -30,6 +34,8 @@
 - Custom path uses the saved custom compiler prompt in API payloads.
 - Empty prompt input does not break compilation.
 - Code changes remain local to settings, app state loading, and API payload wiring.
+- App icon and menu-bar icon match the SG keyboard brand mark.
+- GitHub Release provides `SuperGoal-v0.1.1.dmg`.
 
 ## Verification Log
 
@@ -39,11 +45,16 @@
 - Passed: custom path log showed `compiler prompt mode=custom`; temporary prompt `Output exactly CUSTOM_PROMPT_USED` produced `CUSTOM_PROMPT_USED`.
 - Passed: Settings menu action opens the settings window after fixing prompt-row constraint ordering; UI script observed `windows=1` and log showed `settings window shown`.
 - Passed: menu contains `Custom Compiler Prompt...`; UI script opened Settings and Custom Compiler Prompt as separate windows and logs showed both `settings window shown` and `compiler prompt window shown`.
+- Passed: `./package_dmg.sh` created `release/SuperGoal-v0.1.1.dmg`.
+- Passed: `codesign --verify --deep --strict /Applications/supergoal.app`.
+- Passed: installed app resources include updated `AppIcon.icns` and `MenuBarIcon.png`.
+- Pending until publish step: upload `SuperGoal-v0.1.1.dmg` to GitHub Release.
 
 ## Risks / Open Questions
 
 - Very long custom prompts can make requests larger and slower; settings caps prompt length at 8000 characters.
 - Keep custom prompt editing as one dedicated menu window; do not add presets or profile management without a new request.
+- DMG is ad-hoc signed but not Apple-notarized.
 
 ## Status Maintenance Rules
 

@@ -1,40 +1,34 @@
-# SuperGoal Spec
+# testCodexClaudecode Spec
 
-SuperGoal packages two Codex skills and one macOS menu-bar app for stabilizing Codex goal-mode repository work.
+This repository contains small local experiments plus the durable `supergoal.app-src` macOS helper app and release packaging flow.
 
 ## Scope
 
-- In scope: `skills/supergoal`, `skills/superdev`, and `plugin/supergoal.app-src`.
-- Out of scope: hosted services, prompt marketplaces, cloud sync, multi-user account systems, and unrelated Codex tooling.
+- In scope: maintain the `supergoal.app-src` app as the current durable product surface.
+- Out of scope: redesign unrelated root-level web/game files during supergoal app work.
 
 ## Current Architecture
 
 ```mermaid
 flowchart LR
     subgraph Inputs["Inputs"]
-        A["Rough Codex request"]
-        B["Local skill files"]
-        C["App settings"]
+        A["Root workspace files"]
+        B["supergoal.app-src"]
     end
 
     subgraph Runtime["Current Runtime"]
-        D["supergoal macOS app"]
-        E["supergoal skill"]
-        F["superdev skill"]
+        C["macOS menu bar helper"]
     end
 
     subgraph Outputs["Outputs"]
-        G["Compiled goal prompt"]
-        H["Spec/plan-guided Codex execution"]
+        D["/Applications/supergoal.app"]
+        E["Release DMG"]
     end
 
-    A --> D
+    B --> C
     C --> D
-    D --> G
-    B --> E
-    B --> F
-    E --> H
-    F --> H
+    C --> E
+    A -. unrelated .-> B
 ```
 
 ## Target Architecture
@@ -42,40 +36,28 @@ flowchart LR
 ```mermaid
 flowchart LR
     subgraph Inputs["Inputs"]
-        A["Rough Codex request"]
-        B["Installed SuperGoal skills"]
-        C["Configured macOS app"]
+        A["User selection in Codex"]
+        B["supergoal settings"]
     end
 
     subgraph Runtime["Target Runtime"]
-        D["Prompt compiler app"]
-        E["Goal contract skill"]
-        F["SuperDev architecture gate"]
+        C["supergoal compiler app"]
+        E["Configurable compiler prompt"]
     end
 
     subgraph Outputs["Outputs"]
-        G["Bounded goal-mode prompt"]
-        H["Narrow verified implementation"]
+        D["Replaced goal prompt in Codex"]
+        F["Downloadable macOS DMG"]
     end
 
-    A --> D
-    C --> D
-    D --> G
-    G --> E
-    E --> F
+    A --> C
     B --> E
-    B --> F
-    F --> H
+    E --> C
+    C --> D
+    C --> F
 ```
 
-## Repository Layout
+## Main Boundaries
 
-- `skills/supergoal`: goal contract compiler skill.
-- `skills/superdev`: spec/plan architecture gate skill.
-- `plugin/supergoal.app-src`: macOS menu-bar app source.
-
-## Data Contracts
-
-- Skill entry points are `SKILL.md`.
-- The app bundle identifier is `com.guowei.supergoal`.
-- Release artifacts are zipped `.app` bundles uploaded to GitHub Releases.
+- `supergoal.app-src` owns macOS UI, settings, hotkey handling, prompt compilation, icons, installation scripts, and DMG packaging.
+- Root files outside `supergoal.app-src` are not part of current supergoal feature work.

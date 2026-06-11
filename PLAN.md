@@ -1,50 +1,48 @@
-# SuperGoal Plan
+# testCodexClaudecode Plan
 
 ## Current Status
 
-- Initial repository contents are being published.
-- The repo contains two Codex skills and one macOS app source tree.
-- Release artifact is built from `plugin/supergoal.app-src`.
+- `supergoal.app-src` is the active durable module.
+- Root SuperDev docs were added because the repository previously had no spec or plan files.
+- Release packaging now targets a macOS `.dmg` instead of a zip.
 
 ## Milestones
 
-- Done: add `skills/supergoal`.
-- Done: add `skills/superdev`.
-- Done: add `plugin/supergoal.app-src`.
-- Done: write bilingual README.
-- Done: build release app from repository source.
-- Pending: push initial commit to `fightheyyy/SuperGoal`.
-- Pending: create GitHub Release and upload zipped app.
+- Done: identify `supergoal.app-src` as the only module touched by custom prompt work.
+- Done: add a settings-backed custom compiler prompt while preserving default behavior.
+- Done: regenerate app and menu-bar icons with the rounded SG keyboard mark.
+- Done: add a release DMG packaging script.
 
 ## Next Steps
 
-- Commit and push to GitHub as `fightheyyy`.
-- Create release `v0.1.0`.
+- Monitor release feedback and keep future release artifacts on the `.dmg` path.
 
 ## Owners
 
-- Codex owns packaging and verification for this publishing pass.
-- Repository owner owns future product direction and releases.
+- Codex owns implementation and verification in this thread.
+- User owns product preference decisions.
 
 ## Acceptance Criteria
 
-- GitHub repository has the bilingual README.
-- GitHub repository includes both skills.
-- GitHub repository includes the macOS plugin source.
-- GitHub Release includes a compiled zipped app.
+- Supergoal app behavior remains default-compatible when no custom prompt is set.
+- A user can save a custom compiler prompt from the menu bar's dedicated prompt editor.
+- Saved custom prompt is used for future compile requests.
+- Release users can download a `.dmg` package directly.
+- App and menu-bar icons use the updated rounded SG keyboard mark.
 
 ## Verification Log
 
-- Passed: `plugin/supergoal.app-src/build.sh`.
-- Passed: ad-hoc codesign verify for `build/supergoal.app`.
-- Passed: release zip created at `/tmp/SuperGoal-release-artifacts/supergoal-macos-v0.1.0.zip`.
-- Passed: clean release zip contains no AppleDouble `._` files.
-- Passed: unzipped release app satisfies its designated code-signing requirement.
+- Passed: Swift build via `./supergoal.app-src/build.sh`.
+- Passed: runtime smoke checks for default and custom compiler prompt modes.
+- Passed: generated `supergoal.app-src/release/SuperGoal-v0.1.1.dmg`.
+- Passed: installed `/Applications/supergoal.app` with refreshed icon resources and LaunchServices registration.
+- Pending until publish step: upload `SuperGoal-v0.1.1.dmg` to GitHub Release.
 
 ## Risks / Open Questions
 
-- The app is ad-hoc signed, not notarized.
+- Custom prompt editing now lives in a dedicated menu window; no presets or profile system were added.
+- App is still ad-hoc signed and not notarized, so macOS may require manual confirmation on first open.
 
 ## Status Maintenance Rules
 
-- Keep this plan focused on current release state and fresh verification evidence.
+- Keep this plan focused on current state and recent verification evidence.

@@ -24,42 +24,53 @@ func roundedRect(_ rect: NSRect, radius: CGFloat, color: NSColor) {
     NSBezierPath(roundedRect: rect, xRadius: radius, yRadius: radius).fill()
 }
 
-func drawPixelLettersSG(origin: NSPoint, block: CGFloat, color: NSColor) {
-    let sRows = [
-        "1111",
-        "1000",
-        "1000",
-        "1110",
-        "0001",
-        "0001",
-        "1110"
-    ]
-    let gRows = [
-        "1111",
-        "1000",
-        "1000",
-        "1011",
-        "1001",
-        "1001",
-        "1111"
-    ]
+func roundedStroke(_ rect: NSRect, radius: CGFloat, color: NSColor, lineWidth: CGFloat) {
+    let path = NSBezierPath(roundedRect: rect, xRadius: radius, yRadius: radius)
+    color.setStroke()
+    path.lineWidth = lineWidth
+    path.stroke()
+}
 
-    func draw(rows: [String], xOffset: CGFloat) {
-        for (rowIndex, row) in rows.enumerated() {
-            for (columnIndex, value) in row.enumerated() where value == "1" {
-                rect(
-                    origin.x + xOffset + CGFloat(columnIndex) * block,
-                    origin.y + CGFloat(rows.count - 1 - rowIndex) * block,
-                    block * 0.82,
-                    block * 0.82,
-                    color: color
-                )
-            }
-        }
+func drawKeyboardMark(in frame: NSRect, scale: CGFloat, cornerRadius: CGFloat, strokeWidth: CGFloat, keyRadius: CGFloat = 0) {
+    let shellColor = NSColor(calibratedRed: 0.09, green: 0.11, blue: 0.14, alpha: 1)
+    let borderColor = NSColor(calibratedRed: 0.965, green: 0.973, blue: 0.984, alpha: 1)
+    let accentColor = NSColor(calibratedRed: 0.553, green: 0.922, blue: 0.863, alpha: 1)
+
+    roundedRect(frame, radius: cornerRadius, color: shellColor)
+    roundedStroke(frame.insetBy(dx: strokeWidth / 2, dy: strokeWidth / 2), radius: max(0, cornerRadius - strokeWidth / 2), color: borderColor, lineWidth: strokeWidth)
+
+    let display = NSRect(
+        x: frame.minX + frame.width * 0.136,
+        y: frame.minY + frame.height * 0.36,
+        width: frame.width * 0.73,
+        height: frame.height * 0.45
+    )
+    roundedStroke(display, radius: 3 * scale, color: accentColor, lineWidth: max(1.2 * scale, strokeWidth * 0.42))
+
+    let paragraph = NSMutableParagraphStyle()
+    paragraph.alignment = .center
+    let attrs: [NSAttributedString.Key: Any] = [
+        .font: NSFont.systemFont(ofSize: frame.height * 0.245, weight: .heavy),
+        .foregroundColor: accentColor,
+        .paragraphStyle: paragraph
+    ]
+    NSString(string: "SG").draw(in: display.insetBy(dx: 0, dy: display.height * 0.24), withAttributes: attrs)
+
+    let keyWidth = frame.width * 0.085
+    let keyHeight = frame.height * 0.09
+    let gap = frame.width * 0.042
+    let totalWidth = keyWidth * 6 + gap * 5
+    let startX = frame.midX - totalWidth / 2
+    let keyY = frame.minY + frame.height * 0.145
+    for column in 0..<6 {
+        let keyFrame = NSRect(
+            x: startX + CGFloat(column) * (keyWidth + gap),
+            y: keyY,
+            width: keyWidth,
+            height: keyHeight
+        )
+        roundedRect(keyFrame, radius: keyRadius, color: borderColor)
     }
-
-    draw(rows: sRows, xOffset: 0)
-    draw(rows: gRows, xOffset: block * 5.2)
 }
 
 func drawAppIcon(size: CGFloat) {
@@ -97,30 +108,9 @@ func drawAppIcon(size: CGFloat) {
         )
     }
 
-    let keyboard = NSRect(x: 22 * scale, y: 25 * scale, width: 84 * scale, height: 66 * scale)
-    roundedRect(NSRect(x: keyboard.minX + 2 * scale, y: keyboard.minY - 3 * scale, width: keyboard.width, height: keyboard.height), radius: 10 * scale, color: NSColor.black.withAlphaComponent(0.24))
-    roundedRect(keyboard, radius: 10 * scale, color: NSColor(calibratedWhite: 0.12, alpha: 1))
-    roundedRect(NSRect(x: 26 * scale, y: 30 * scale, width: 76 * scale, height: 55 * scale), radius: 6 * scale, color: NSColor(calibratedWhite: 0.17, alpha: 1))
-    rect(30 * scale, 78 * scale, 68 * scale, 2 * scale, color: NSColor.white.withAlphaComponent(0.14))
-
-    let key = NSColor(calibratedWhite: 0.63, alpha: 0.72)
-    let keyHot = NSColor.controlAccentColor.withAlphaComponent(0.82)
-    for row in 0..<3 {
-        let y = CGFloat(63 - row * 10) * scale
-        let offset = CGFloat(row) * 4 * scale
-        let count = row == 0 ? 8 : 7
-        for column in 0..<count {
-            let x = 32 * scale + offset + CGFloat(column) * 8 * scale
-            let isHot = (row == 0 && column == 5) || (row == 1 && column == 2)
-            rect(x, y, 5 * scale, 4 * scale, color: isHot ? keyHot : key)
-        }
-    }
-
-    roundedRect(NSRect(x: 39 * scale, y: 31 * scale, width: 50 * scale, height: 20 * scale), radius: 4 * scale, color: NSColor.controlAccentColor.withAlphaComponent(0.92))
-    rect(43 * scale, 47 * scale, 42 * scale, 2 * scale, color: NSColor.white.withAlphaComponent(0.22))
-    drawPixelLettersSG(origin: NSPoint(x: 48 * scale, y: 35 * scale), block: 2.05 * scale, color: NSColor.white.withAlphaComponent(0.92))
-
-    rect(34 * scale, 27 * scale, 60 * scale, 2 * scale, color: NSColor.black.withAlphaComponent(0.25))
+    let keyboard = NSRect(x: 20 * scale, y: 34 * scale, width: 88 * scale, height: 64 * scale)
+    roundedRect(NSRect(x: keyboard.minX + 3 * scale, y: keyboard.minY - 4 * scale, width: keyboard.width, height: keyboard.height), radius: 8 * scale, color: NSColor.black.withAlphaComponent(0.22))
+    drawKeyboardMark(in: keyboard, scale: scale, cornerRadius: 7 * scale, strokeWidth: 4 * scale, keyRadius: 1.2 * scale)
     NSGraphicsContext.restoreGraphicsState()
 }
 
@@ -144,6 +134,31 @@ func renderPNG(size: Int, draw: (CGFloat) -> Void) -> Data {
     NSColor.clear.setFill()
     NSBezierPath(rect: NSRect(x: 0, y: 0, width: size, height: size)).fill()
     draw(CGFloat(size))
+    NSGraphicsContext.restoreGraphicsState()
+
+    return rep.representation(using: .png, properties: [:])!
+}
+
+func renderBitmap(width: Int, height: Int, draw: (CGFloat, CGFloat) -> Void) -> Data {
+    let rep = NSBitmapImageRep(
+        bitmapDataPlanes: nil,
+        pixelsWide: width,
+        pixelsHigh: height,
+        bitsPerSample: 8,
+        samplesPerPixel: 4,
+        hasAlpha: true,
+        isPlanar: false,
+        colorSpaceName: .deviceRGB,
+        bytesPerRow: 0,
+        bitsPerPixel: 0
+    )!
+    rep.size = NSSize(width: width, height: height)
+
+    NSGraphicsContext.saveGraphicsState()
+    NSGraphicsContext.current = NSGraphicsContext(bitmapImageRep: rep)
+    NSColor.clear.setFill()
+    NSBezierPath(rect: NSRect(x: 0, y: 0, width: width, height: height)).fill()
+    draw(CGFloat(width), CGFloat(height))
     NSGraphicsContext.restoreGraphicsState()
 
     return rep.representation(using: .png, properties: [:])!
@@ -177,19 +192,30 @@ guard iconutil.terminationStatus == 0 else {
 }
 try? fileManager.removeItem(at: iconsetURL)
 
-let menuData = renderPNG(size: 36) { _ in
+let colorMenuData = renderBitmap(width: 90, height: 54) { width, height in
+    let scale = min(width / 118, height / 86)
+    let x = (width - 118 * scale) / 2
+    let y = (height - 86 * scale) / 2
+    let shell = NSRect(x: x, y: y, width: 118 * scale, height: 86 * scale)
+    drawKeyboardMark(in: shell, scale: scale, cornerRadius: 8 * scale, strokeWidth: 4 * scale, keyRadius: 1.1 * scale)
+}
+try colorMenuData.write(to: assetsURL.appendingPathComponent("MenuBarIcon.png"))
+
+let menuData = renderBitmap(width: 60, height: 36) { width, _ in
+    let scale = width / 60
     let ink = NSColor.black
-    rect(2, 7, 32, 2, color: ink)
-    rect(2, 27, 32, 2, color: ink)
-    rect(2, 9, 2, 18, color: ink)
-    rect(32, 9, 2, 18, color: ink)
-    let keys: [(CGFloat, CGFloat, CGFloat)] = [
-        (7, 12, 4), (13, 12, 4), (19, 12, 4), (25, 12, 4),
-        (8, 18, 4), (14, 18, 4), (20, 18, 4), (26, 18, 3),
-        (11, 23, 14)
+    roundedStroke(NSRect(x: 5 * scale, y: 3 * scale, width: 50 * scale, height: 30 * scale), radius: 4 * scale, color: ink, lineWidth: 2 * scale)
+    roundedStroke(NSRect(x: 14 * scale, y: 14 * scale, width: 32 * scale, height: 13 * scale), radius: 1.5 * scale, color: ink, lineWidth: 1.5 * scale)
+    let paragraph = NSMutableParagraphStyle()
+    paragraph.alignment = .center
+    let attrs: [NSAttributedString.Key: Any] = [
+        .font: NSFont.systemFont(ofSize: 8 * scale, weight: .heavy),
+        .foregroundColor: ink,
+        .paragraphStyle: paragraph
     ]
-    for key in keys {
-        rect(key.0, key.1, key.2, 2, color: ink)
+    NSString(string: "SG").draw(in: NSRect(x: 14 * scale, y: 15 * scale, width: 32 * scale, height: 10 * scale), withAttributes: attrs)
+    for column in 0..<6 {
+        rect(14 * scale + CGFloat(column) * 6 * scale, 7 * scale, 4 * scale, 3 * scale, color: ink)
     }
 }
 try menuData.write(to: assetsURL.appendingPathComponent("MenuBarIconTemplate.png"))

@@ -9,5 +9,7 @@ DEST="/Applications/supergoal.app"
 codesign --force --sign - --requirements '=designated => identifier "com.guowei.supergoal"' "$APP"
 rm -rf "$DEST"
 ditto "$APP" "$DEST"
+touch "$DEST"
+/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -f "$DEST" >/dev/null 2>&1 || true
 
 echo "Installed: $DEST"
