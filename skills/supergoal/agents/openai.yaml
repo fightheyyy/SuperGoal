@@ -1,0 +1,4 @@
+interface:
+  display_name: "SuperGoal"
+  short_description: "Compile stable Codex goal prompts"
+  default_prompt: "Use $supergoal to rewrite this messy repo request into a narrow, pasteable Codex goal-mode prompt."

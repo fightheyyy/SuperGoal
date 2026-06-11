@@ -1,0 +1,4 @@
+.DS_Store
+plugin/supergoal.app-src/build/
+*.zip
+*.log

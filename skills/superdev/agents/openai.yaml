@@ -1,0 +1,4 @@
+interface:
+  display_name: "SuperDev"
+  short_description: "Develop with spec, plan, and architecture gates"
+  default_prompt: "Use $superdev to align SPEC.md, PLAN.md, Current Architecture, and Target Architecture before implementing a durable module change."
