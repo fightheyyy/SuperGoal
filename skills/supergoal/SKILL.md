@@ -1,25 +1,27 @@
 ---
 name: supergoal
 description: >-
-  Use when a user wants to optimize, rewrite, compile, or execute a Codex
-  goal-mode prompt for repository work, especially broad changes, refactors,
-  cleanup, slimming passes, architecture migrations, stability work, or
-  long-running tasks. Turn messy natural-language requirements into
-  acceptance-first Goal Contracts: define when Codex should stop, make Codex
-  write the detailed main goal, and when useful make Codex assign bounded
-  subagent goals for parallel discovery or implementation. Keep scope,
-  non-goals, anti-complexity rules, stop conditions, acceptance criteria,
-  verification, and SuperDev SPEC.md / PLAN.md discipline explicit so
-  goal-mode execution stays narrow and avoids over-engineered code.
+  Use when a user wants to optimize, rewrite, compile, start, or execute a
+  Codex goal-mode task for repository work, especially broad changes,
+  refactors, cleanup, slimming passes, architecture migrations, stability
+  work, or long-running tasks. Turn messy natural-language requirements into
+  acceptance-first execution: define when Codex should stop, create or
+  activate a detailed main goal when the user asks to do the work, and when
+  useful launch bounded subagent goals for parallel discovery or
+  implementation. Only return a pasteable prompt when the user explicitly asks
+  for prompt-writing without execution. Keep scope, non-goals,
+  anti-complexity rules, stop conditions, acceptance criteria, verification,
+  and SuperDev SPEC.md / PLAN.md discipline explicit so goal-mode execution
+  stays narrow and avoids over-engineered code.
 ---
 
 # SuperGoal
 
-SuperGoal is an acceptance-first goal-mode prompt compiler and execution stabilizer for SuperDev repositories. Use it before and during long-running Codex goals to convert a user's natural-language intent into stop conditions, a detailed main Goal Contract, and optional subagent Goal Contracts that keep architecture docs, execution state, implementation, and verification aligned.
+SuperGoal is an acceptance-first goal starter and execution stabilizer for SuperDev repositories. Use it before and during long-running Codex goals to convert a user's natural-language intent into stop conditions, a detailed main Goal Contract, and optional subagent Goal Contracts that keep architecture docs, execution state, implementation, and verification aligned. It can also compile pasteable prompts, but only when the user explicitly asks for prompt-writing instead of execution.
 
 ## Core Behavior
 
-Before substantial repository work, produce or internalize a Goal Contract. Do not treat the user's raw natural-language request as the execution plan when it is broad, emotional, ambiguous, example-heavy, or multi-module.
+Before substantial repository work, draft a Goal Contract internally. Output that contract as the final artifact only in compile-only mode. Do not treat the user's raw natural-language request as the execution plan when it is broad, emotional, ambiguous, example-heavy, or multi-module.
 
 Start from acceptance, not activity:
 
@@ -27,7 +29,7 @@ Start from acceptance, not activity:
 - Treat the user's request as "what must be true when the goal stops", not as a list of implementation steps to obey blindly.
 - If the user provides tactics, examples, or complaints, preserve them as context only when they help define acceptance.
 - Make Codex write the detailed main goal from those acceptance criteria instead of merely expanding the user's wording.
-- When subagents are useful and available, make Codex write bounded subagent goals with their own stop conditions and deliverables.
+- When subagents are useful and available, launch bounded subagent goals with their own stop conditions and deliverables. In compile-only mode, write those subagent goals into the prompt instead.
 
 Use the SuperDev skill as the architecture gate when available. SuperGoal does not replace SuperDev; it narrows the goal so SuperDev can be applied cleanly.
 
@@ -38,9 +40,32 @@ During execution, keep the contract alive:
 - Prefer the smallest implementation that satisfies the contract.
 - Stop when the target architecture is unclear, scope expands materially, or acceptance cannot be verified.
 
-## Prompt Compiler Mode
+## Mode Selection
 
-When the user asks to "write a goal", "optimize this prompt", "turn this into a Codex goal", "make this stable for goal mode", or similar, output a directly pasteable goal-mode prompt. Do not execute repository changes unless the user explicitly asks to execute.
+Within a SuperGoal-triggered goal-mode request, default to execution when the user asks Codex to do, build, fix, implement, refactor, clean, migrate, verify, or otherwise perform repository work. Do not stop after drafting a prompt in those cases.
+
+Use compile-only mode only when the user explicitly asks to write, optimize, rewrite, or compile a prompt for later use and does not ask Codex to execute the underlying work.
+
+If intent is mixed, prefer execution and keep the compiled Goal Contract internal. Mention the goal contract briefly, then start the work.
+
+## Goal Execution Mode
+
+When the user asks Codex to actually do the work, create or activate the goal and continue execution instead of returning a text prompt as the final artifact.
+
+Execute in this order:
+
+1. Draft observable acceptance metrics and stop conditions.
+2. Write a detailed parent Goal Contract from those metrics.
+3. Use the available goal-mode mechanism to start or update the parent goal, such as `create_goal` when that tool exists in the environment.
+4. If subagent tools are available and the work has independent slices, start bounded subagents in parallel. Give each subagent its own Goal Contract with scope, forbidden work, stop condition, expected output, and merge plan.
+5. Continue the parent task while subagents run when there is non-overlapping work to do.
+6. Integrate subagent findings or patches, then verify acceptance.
+
+If goal tools or subagent tools are unavailable, say so briefly and continue with the closest safe fallback. Do not pretend a goal or subagent was started.
+
+## Shared Goal Drafting Rules
+
+Use these rules in both execution and compile-only mode. In execution mode, apply them internally before starting or updating the goal. In compile-only mode, turn them into a directly pasteable goal-mode prompt.
 
 Compile the request in this order:
 
@@ -81,11 +106,15 @@ Compile the request in this order:
    - Include focused checks that match the goal: tests, type checks, lint, build, smoke tests, targeted searches, or manual verification.
    - Require evidence to be recorded in relevant `PLAN.md` files when SuperDev docs exist.
 
-The compiled prompt should be opinionated, narrow, and easy to paste into Codex goal mode. It should not be a motivational essay or a long project plan.
+When compile-only mode is requested, the compiled prompt should be opinionated, narrow, and easy to paste into Codex goal mode. It should not be a motivational essay or a long project plan.
+
+## Compile-Only Mode
+
+Use compile-only mode only when the user explicitly asks to "write a goal", "optimize this prompt", "turn this into a Codex goal", "make this stable for goal mode", or similar for later use. Do not execute repository changes in compile-only mode.
 
 ## Goal Contract
 
-For broad tasks, first draft a compact contract with these fields. If the user only asked for a goal prompt, output the contract as the final artifact. If the user asked you to execute, use the contract internally and then proceed.
+For broad tasks, first draft a compact contract with these fields. If the user only asked for a goal prompt, output the contract as the final artifact. If the user asked you to execute, use the contract to start or update the active goal, then proceed.
 
 - `Objective`: one sentence describing the exact outcome.
 - `Acceptance / Stop Metrics`: the observable conditions that tell Codex the goal is done.
@@ -117,12 +146,14 @@ For a reusable template, read `references/goal-contract-template.md`.
    - Make the main goal detailed enough that another Codex run can execute it without reading the prior conversation.
    - Prefer acceptance-driven phrasing: "Stop when X is true and verified", not "Do these steps".
    - Include explicit proof requirements before allowing file moves, abstractions, or broad cleanup.
+   - In execution mode, start or update the active parent goal after drafting this contract when goal tools are available.
 
 3. Draft subagent goals when parallelism would reduce uncertainty.
    - Use subagents for discovery or independent work only when their outputs can be merged cleanly.
    - Give each subagent its own scope, forbidden areas, stop condition, and required evidence.
    - Tell subagents to return findings, file references, and recommended next action, not broad essays.
-   - If subagents are not available or the task is small, omit subagent goals.
+   - In execution mode, launch available subagent tools for those goals instead of only listing them.
+   - If subagents are not available or the task is small, omit subagent goals or state the fallback briefly.
 
 4. Establish the SuperDev gate.
    - Identify whether the request touches repository-wide behavior, one durable module, or multiple modules.
@@ -163,10 +194,10 @@ Pause and ask or propose a doc update before continuing when:
 
 ## Output Style
 
-When asked to "write a goal", produce a concise goal-mode prompt with the Goal Contract embedded. Make it directly pasteable into Codex goal mode.
+When asked to execute repository work, do not merely return a prompt. Start or update the goal, launch useful bounded subagents when available, then proceed. Keep the contract concise in user updates.
 
-When asked to "optimize a prompt", return the optimized goal prompt first. Include at most a short note after it if assumptions or unresolved inputs matter.
+When asked to "write a goal" or "optimize a prompt" for later use, produce a concise goal-mode prompt with the Goal Contract embedded. Make it directly pasteable into Codex goal mode. Include at most a short note after it if assumptions or unresolved inputs matter.
 
-When asked to execute, keep the contract concise in user updates, then do the work. Do not bury the user in process text.
+When tools required for true goal or subagent startup are unavailable, say that plainly and continue with the closest safe sequential execution path. Do not bury the user in process text.
 
 Use direct language. The point is stable execution, not ceremony.

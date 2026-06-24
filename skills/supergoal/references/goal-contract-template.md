@@ -1,6 +1,6 @@
 # SuperGoal Contract Template
 
-Use this template when drafting a pasteable goal-mode prompt for Codex. Replace every placeholder. Keep the result narrow enough that a goal-mode agent can execute it without inventing extra architecture.
+Use this template when drafting a pasteable goal-mode prompt for Codex or when starting an active goal from a rough request. Replace every placeholder. Keep the result narrow enough that a goal-mode agent can execute it without inventing extra architecture.
 
 Start by defining when Codex should stop. The user does not need to describe every implementation step; the goal prompt should turn their rough request into acceptance metrics, then require Codex to write the detailed main goal and any useful subagent goals from those metrics.
 
@@ -15,6 +15,11 @@ Acceptance-first instruction:
 - First define the observable acceptance metrics and stop conditions.
 - Then write the detailed main Goal Contract from those metrics before editing code.
 - If the work has independent discovery or implementation slices, create bounded subagent Goal Contracts too.
+
+Goal startup instruction:
+- If this is being used inside an active Codex session and goal tools are available, create or activate this as the parent goal instead of only returning this block as text.
+- If subagent tools are available, launch the bounded subagent goals below in parallel where their scopes are independent.
+- If goal or subagent tools are unavailable, state the fallback plainly and continue sequentially with the same acceptance metrics.
 
 Raw request boundary:
 - Treat the original request as context, not as an unlimited execution plan.
@@ -45,13 +50,14 @@ SuperDev architecture gate:
 Execution phases:
 1. Translate the request into acceptance metrics and stop conditions.
 2. Write the detailed main Goal Contract from those metrics.
-3. Inventory current state with focused file/search reads.
-4. Create subagent Goal Contracts only for independent slices that can run in parallel.
-5. Confirm or repair the SuperDev docs gate.
-6. Implement the smallest change that satisfies this goal.
-7. Run focused verification.
-8. Update SPEC.md / PLAN.md with current architecture, status, next steps, risks, and verification evidence.
-9. Close with changed files, verification, and remaining risks.
+3. Create or activate the parent goal when goal-mode tools are available.
+4. Inventory current state with focused file/search reads.
+5. Create and launch subagent Goal Contracts only for independent slices that can run in parallel.
+6. Confirm or repair the SuperDev docs gate.
+7. Implement the smallest change that satisfies this goal.
+8. Run focused verification.
+9. Update SPEC.md / PLAN.md with current architecture, status, next steps, risks, and verification evidence.
+10. Close with changed files, verification, and remaining risks.
 
 Subagent goals:
 - Subagent A goal: <read-only discovery or bounded implementation slice>
