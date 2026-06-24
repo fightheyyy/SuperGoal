@@ -6,10 +6,11 @@ description: >-
   refactors, cleanup, slimming passes, architecture migrations, stability
   work, or long-running tasks. Turn messy natural-language requirements into
   acceptance-first execution: define when Codex should stop, create or
-  activate a detailed main goal when the user asks to do the work, and when
-  useful launch bounded subagent goals for parallel discovery or
-  implementation. Only return a pasteable prompt when the user explicitly asks
-  for prompt-writing without execution. Keep scope, non-goals,
+  activate a detailed main goal when the user asks to do the work, and
+  default to launching bounded subagent goals whenever the work has
+  independent discovery, implementation, or verification slices. Only return a
+  pasteable prompt when the user explicitly asks for prompt-writing without
+  execution. Keep scope, non-goals,
   anti-complexity rules, stop conditions, acceptance criteria, verification,
   and SuperDev SPEC.md / PLAN.md discipline explicit so goal-mode execution
   stays narrow and avoids over-engineered code.
@@ -17,7 +18,7 @@ description: >-
 
 # SuperGoal
 
-SuperGoal is an acceptance-first goal starter and execution stabilizer for SuperDev repositories. Use it before and during long-running Codex goals to convert a user's natural-language intent into stop conditions, a detailed main Goal Contract, and optional subagent Goal Contracts that keep architecture docs, execution state, implementation, and verification aligned. It can also compile pasteable prompts, but only when the user explicitly asks for prompt-writing instead of execution.
+SuperGoal is an acceptance-first goal starter and execution stabilizer for SuperDev repositories. Use it before and during long-running Codex goals to convert a user's natural-language intent into stop conditions, a detailed main Goal Contract, and bounded subagent Goal Contracts that keep architecture docs, execution state, implementation, and verification aligned. It can also compile pasteable prompts, but only when the user explicitly asks for prompt-writing instead of execution.
 
 ## Core Behavior
 
@@ -29,7 +30,7 @@ Start from acceptance, not activity:
 - Treat the user's request as "what must be true when the goal stops", not as a list of implementation steps to obey blindly.
 - If the user provides tactics, examples, or complaints, preserve them as context only when they help define acceptance.
 - Make Codex write the detailed main goal from those acceptance criteria instead of merely expanding the user's wording.
-- When subagents are useful and available, launch bounded subagent goals with their own stop conditions and deliverables. In compile-only mode, write those subagent goals into the prompt instead.
+- In execution mode, perform a subagent opportunity scan before implementation. If subagent tools are available and any independent slice exists, launch bounded subagent goals with their own stop conditions and deliverables. In compile-only mode, write those subagent goals into the prompt instead.
 
 Use the SuperDev skill as the architecture gate when available. SuperGoal does not replace SuperDev; it narrows the goal so SuperDev can be applied cleanly.
 
@@ -57,9 +58,11 @@ Execute in this order:
 1. Draft observable acceptance metrics and stop conditions.
 2. Write a detailed parent Goal Contract from those metrics.
 3. Use the available goal-mode mechanism to start or update the parent goal, such as `create_goal` when that tool exists in the environment.
-4. If subagent tools are available and the work has independent slices, start bounded subagents in parallel. Give each subagent its own Goal Contract with scope, forbidden work, stop condition, expected output, and merge plan.
-5. Continue the parent task while subagents run when there is non-overlapping work to do.
-6. Integrate subagent findings or patches, then verify acceptance.
+4. Run a subagent opportunity scan. Look for independent codebase reconnaissance, risky-file inventory, implementation slices with disjoint write sets, test strategy, regression search, release/docs checks, or UI verification.
+5. If subagent tools are available and the scan finds at least one independent slice, launch subagents before the parent agent starts overlapping implementation. Give each subagent its own Goal Contract with scope, forbidden work, stop condition, expected output, and merge plan.
+6. If no subagent is launched, state the reason briefly: no tool, no independent slice after scanning, unsafe write overlap, or user explicitly requested solo work. A small feature is not by itself a valid skip reason when read-only reconnaissance or independent verification would help.
+7. Continue the parent task while subagents run when there is non-overlapping work to do.
+8. Integrate subagent findings or patches, then verify acceptance.
 
 If goal tools or subagent tools are unavailable, say so briefly and continue with the closest safe fallback. Do not pretend a goal or subagent was started.
 
@@ -96,10 +99,12 @@ Compile the request in this order:
    - Require proof before moving, renaming, deleting, or consolidating files.
    - Require stop-and-ask behavior when scope expands or verification cannot prove acceptance.
 
-6. Add subagent goals when useful.
-   - Use subagents only for independent slices: codebase reconnaissance, alternative implementation options, risky-file inventory, test strategy, regression search, or isolated module work.
+6. Add subagent goals by default whenever any independent slice exists.
+   - In execution mode, actively search for subagentable slices before implementation; do not wait until the work feels large.
+   - Use subagents for independent slices: codebase reconnaissance, alternative implementation options, risky-file inventory, test strategy, regression search, UI/manual verification, docs/release checks, or isolated module work with a disjoint write set.
    - Each subagent must receive its own mini Goal Contract: purpose, allowed files/modules, forbidden work, stop condition, expected output, and how its findings will be merged into the parent goal.
    - Prefer read-only scout subagents unless implementation work is explicitly assigned to a bounded path.
+   - Prefer multiple small subagent goals over one broad "investigate this" goal when the questions are independent.
    - Do not ask subagents to "help broadly"; give them concrete acceptance criteria and require concise evidence.
 
 7. Add verification.
@@ -129,7 +134,7 @@ For broad tasks, first draft a compact contract with these fields. If the user o
 - `Stop Conditions`: conditions that require pausing for user input instead of improvising.
 - `Acceptance Criteria`: observable completion requirements.
 - `Verification Evidence`: checks to run and where results must be recorded.
-- `Subagent Goals`: optional bounded goals for parallel subagents, each with scope, stop condition, and deliverable.
+- `Subagent Goals`: bounded goals for parallel subagents when any independent slice exists; otherwise include the specific skip reason. Do not mark this optional in execution mode.
 
 For a reusable template, read `references/goal-contract-template.md`.
 
@@ -148,12 +153,13 @@ For a reusable template, read `references/goal-contract-template.md`.
    - Include explicit proof requirements before allowing file moves, abstractions, or broad cleanup.
    - In execution mode, start or update the active parent goal after drafting this contract when goal tools are available.
 
-3. Draft subagent goals when parallelism would reduce uncertainty.
-   - Use subagents for discovery or independent work only when their outputs can be merged cleanly.
+3. Scan for and launch subagent goals before implementation when parallelism is safe.
+   - Treat subagents as the default for any independent discovery, verification, or disjoint implementation slice.
+   - Use subagents only when their outputs can be merged cleanly.
    - Give each subagent its own scope, forbidden areas, stop condition, and required evidence.
    - Tell subagents to return findings, file references, and recommended next action, not broad essays.
    - In execution mode, launch available subagent tools for those goals instead of only listing them.
-   - If subagents are not available or the task is small, omit subagent goals or state the fallback briefly.
+   - If no subagent is launched, state the skip reason briefly before continuing.
 
 4. Establish the SuperDev gate.
    - Identify whether the request touches repository-wide behavior, one durable module, or multiple modules.
@@ -194,7 +200,9 @@ Pause and ask or propose a doc update before continuing when:
 
 ## Output Style
 
-When asked to execute repository work, do not merely return a prompt. Start or update the goal, launch useful bounded subagents when available, then proceed. Keep the contract concise in user updates.
+When asked to execute repository work, do not merely return a prompt. Start or update the goal, launch bounded subagents for independent slices when available, then proceed. Keep the contract concise in user updates.
+
+When subagent tools are available, do a subagent opportunity scan and launch at least one bounded subagent for any independent slice. Read-only reconnaissance and independent verification count as independent slices. If none is launched, name the skip reason.
 
 When asked to "write a goal" or "optimize a prompt" for later use, produce a concise goal-mode prompt with the Goal Contract embedded. Make it directly pasteable into Codex goal mode. Include at most a short note after it if assumptions or unresolved inputs matter.
 

@@ -1,4 +1,4 @@
 interface:
   display_name: "SuperGoal"
-  short_description: "Start acceptance-first Codex goals"
-  default_prompt: "Use $supergoal to turn this rough repo request into acceptance metrics, start a detailed Codex goal when execution is requested, and assign bounded subagent goals when useful."
+  short_description: "Start acceptance-first parallel Codex goals"
+  default_prompt: "Use $supergoal to turn this rough repo request into acceptance metrics, start a detailed Codex goal when execution is requested, and launch bounded subagent goals for independent slices."

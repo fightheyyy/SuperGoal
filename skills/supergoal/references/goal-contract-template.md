@@ -14,11 +14,12 @@ Acceptance-first instruction:
 - Treat my request as the desired end state, not as a step-by-step implementation plan.
 - First define the observable acceptance metrics and stop conditions.
 - Then write the detailed main Goal Contract from those metrics before editing code.
-- If the work has independent discovery or implementation slices, create bounded subagent Goal Contracts too.
+- Before implementation, scan for independent discovery, implementation, and verification slices. If any exist and subagent tools are available, create bounded subagent Goal Contracts too.
 
 Goal startup instruction:
 - If this is being used inside an active Codex session and goal tools are available, create or activate this as the parent goal instead of only returning this block as text.
 - If subagent tools are available, launch the bounded subagent goals below in parallel where their scopes are independent.
+- If no subagent is launched, state the reason plainly: no tool, no independent slice after scanning, unsafe write overlap, or user explicitly requested solo work. A small feature is not by itself a valid skip reason when read-only reconnaissance or independent verification would help.
 - If goal or subagent tools are unavailable, state the fallback plainly and continue sequentially with the same acceptance metrics.
 
 Raw request boundary:
@@ -51,21 +52,23 @@ Execution phases:
 1. Translate the request into acceptance metrics and stop conditions.
 2. Write the detailed main Goal Contract from those metrics.
 3. Create or activate the parent goal when goal-mode tools are available.
-4. Inventory current state with focused file/search reads.
-5. Create and launch subagent Goal Contracts only for independent slices that can run in parallel.
-6. Confirm or repair the SuperDev docs gate.
-7. Implement the smallest change that satisfies this goal.
-8. Run focused verification.
-9. Update SPEC.md / PLAN.md with current architecture, status, next steps, risks, and verification evidence.
-10. Close with changed files, verification, and remaining risks.
+4. Run a subagent opportunity scan for independent discovery, implementation, and verification slices.
+5. Create and launch subagent Goal Contracts for every independent slice that can run in parallel.
+6. If no subagent is launched, state the skip reason before continuing.
+7. Inventory current state with focused file/search reads.
+8. Confirm or repair the SuperDev docs gate.
+9. Implement the smallest change that satisfies this goal.
+10. Run focused verification.
+11. Update SPEC.md / PLAN.md with current architecture, status, next steps, risks, and verification evidence.
+12. Close with changed files, verification, and remaining risks.
 
 Subagent goals:
-- Subagent A goal: <read-only discovery or bounded implementation slice>
+- Subagent A goal: <read-only discovery, independent verification, or bounded implementation slice>
   - Scope: <files/modules it may inspect or edit>
   - Non-goals: <what it must not touch>
   - Stop condition: <what evidence means this subagent is done>
   - Deliverable: <concise findings, file references, recommendation, or patch summary>
-- Subagent B goal: <omit unless genuinely independent>
+- Subagent B goal: <another independent slice, or "None: <skip reason>">
 
 Anti-complexity rules:
 - Do not introduce new central orchestrators, registries, runners, schemas, CI gates, or package scripts unless explicitly required.
