@@ -1,4 +1,4 @@
 interface:
   display_name: "SuperGoal"
-  short_description: "Compile stable Codex goal prompts"
-  default_prompt: "Use $supergoal to rewrite this messy repo request into a narrow, pasteable Codex goal-mode prompt."
+  short_description: "Compile acceptance-first Codex goals"
+  default_prompt: "Use $supergoal to turn this rough repo request into acceptance metrics, a detailed Codex goal, and optional subagent goals."

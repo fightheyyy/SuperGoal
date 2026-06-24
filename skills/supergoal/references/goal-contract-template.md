@@ -2,11 +2,19 @@
 
 Use this template when drafting a pasteable goal-mode prompt for Codex. Replace every placeholder. Keep the result narrow enough that a goal-mode agent can execute it without inventing extra architecture.
 
+Start by defining when Codex should stop. The user does not need to describe every implementation step; the goal prompt should turn their rough request into acceptance metrics, then require Codex to write the detailed main goal and any useful subagent goals from those metrics.
+
 ```text
 Goal: <one concrete outcome>
 
 Use $supergoal and $superdev.
 Work in <absolute repository path>.
+
+Acceptance-first instruction:
+- Treat my request as the desired end state, not as a step-by-step implementation plan.
+- First define the observable acceptance metrics and stop conditions.
+- Then write the detailed main Goal Contract from those metrics before editing code.
+- If the work has independent discovery or implementation slices, create bounded subagent Goal Contracts too.
 
 Raw request boundary:
 - Treat the original request as context, not as an unlimited execution plan.
@@ -14,6 +22,11 @@ Raw request boundary:
 
 Objective:
 - <exact outcome in one or two bullets>
+
+Acceptance / stop metrics:
+- Codex may stop when <observable outcome is true>.
+- Codex may stop when <verification command/search/manual check passes>.
+- Codex must not stop merely because code was changed; it must prove the acceptance metrics.
 
 Repository / module scope:
 - Root: <repo root>
@@ -30,12 +43,23 @@ SuperDev architecture gate:
 - If target architecture is missing, stale, or inconsistent, update or propose docs before production implementation.
 
 Execution phases:
-1. Inventory current state with focused file/search reads.
-2. Confirm or repair the SuperDev docs gate.
-3. Implement the smallest change that satisfies this goal.
-4. Run focused verification.
-5. Update SPEC.md / PLAN.md with current architecture, status, next steps, risks, and verification evidence.
-6. Close with changed files, verification, and remaining risks.
+1. Translate the request into acceptance metrics and stop conditions.
+2. Write the detailed main Goal Contract from those metrics.
+3. Inventory current state with focused file/search reads.
+4. Create subagent Goal Contracts only for independent slices that can run in parallel.
+5. Confirm or repair the SuperDev docs gate.
+6. Implement the smallest change that satisfies this goal.
+7. Run focused verification.
+8. Update SPEC.md / PLAN.md with current architecture, status, next steps, risks, and verification evidence.
+9. Close with changed files, verification, and remaining risks.
+
+Subagent goals:
+- Subagent A goal: <read-only discovery or bounded implementation slice>
+  - Scope: <files/modules it may inspect or edit>
+  - Non-goals: <what it must not touch>
+  - Stop condition: <what evidence means this subagent is done>
+  - Deliverable: <concise findings, file references, recommendation, or patch summary>
+- Subagent B goal: <omit unless genuinely independent>
 
 Anti-complexity rules:
 - Do not introduce new central orchestrators, registries, runners, schemas, CI gates, or package scripts unless explicitly required.
@@ -52,6 +76,7 @@ Stop conditions:
 - Stop if acceptance requires verification that cannot be run.
 - Stop if the implementation is becoming larger than the goal justifies.
 - Stop before creating a new abstraction or central system not explicitly allowed above.
+- Stop if a subagent goal returns evidence that invalidates the main goal or acceptance metrics.
 
 Acceptance criteria:
 - <observable completion criterion>
